@@ -3,33 +3,41 @@
     $(document).ready(function () {
     // Fetch data using AJAX
 
-    function addRow(user) {
-        $("#usersList").append("<tr><td>" + user.id + "</td>" +
-            "<td>" + user.firstName +
-            "</td><td>" + user.secondName + "</td>" +
-            "<td>"+user.email+"</td>" +"<td>"+user.address+"</td>"+
-            "<td>"+user.phoneNumber+"</td>"+
+    function addRow(volunteer) {
+        $("#usersList").append("<tr><td>" + volunteer.volunteerID + "</td>" +
+            "<td>" + volunteer.volunteerName +
+            "</td><td>" + volunteer.volunteerSurName + "</td>" +
+            "<td>"+volunteer.volunteerAge+"</td>" +"<td>"+volunteer.volunteerCity+"</td>"+
+            "<td>"+volunteer.volunteerPhonenumber+"</td>"+
+             "<td>"+volunteer.volunteerCity+"</td>"
+                +"<td>"+ volunteer.schoolName+ "</td>"+
+                 "<td>"+volunteer.volunteerMale+"</td>"
+                  +"<td>"+ volunteer.volunteerEmail+ "</td>"+
             "<td>" +
-            "<button onclick='findUserById(" + user.id + ")'>" + "Profile" + "</button>" +
+            "<button onclick='findUserById(" + volunteer.volunteerID + ")'>" + "Profile" + "</button>" +
             "</td>"+
             "</tr>");
     }
     $.ajax({
     type: "GET",
-    url: "/users/getAll",
-    success: function (users) {
+    url: "/volunteers/getAll",
+    success: function (volunteer) {
     // Iterate through the products and display them in the table
-    const usersList = $("#usersList");
-    users.forEach(function (users) {
-    usersList.append("<tr>" +
-    "<td>" + users.id + "</td>"
-    +"<td>"+ users.firstName + "</td>"
-    +"<td>"+ users.secondName +"</td>"+
-    "<td>"+ users.email+"</td>"+
-    "<td>"+users.address+"</td>"
-    +"<td>"+ users.phoneNumber+ "</td>"+
+    const volunteerList = $("#volunteerList");
+  volunteer.forEach(function (volunteer) {
+    volunteerList.append("<tr>" +
+    "<td>" + volunteer.volunteerID + "</td>"
+    +"<td>"+ volunteer.volunteerName + "</td>"
+    +"<td>"+ volunteer.volunteerSurName +"</td>"+
+    "<td>"+ volunteer.volunteerAge+"</td>"+
+    "<td>"+volunteer.volunteerCity+"</td>"
+    +"<td>"+ volunteer.schoolName+ "</td>"+
+     "<td>"+volunteer.volunteerMale+"</td>"
+     "<td>"+volunteer.volunteerPhonenumber+"</td>"+
+        +"<td>"+ volunteer.volunteerEmail+ "</td>"+
+
     "<td>" +
-    "<button onclick='findUserById(" + users.id + ")'>" + "Profile" + "</button>" +
+    "<button onclick='findUserById(" + volunteer.volunteerID + ")'>" + "Profile" + "</button>" +
     "</td>"
     +"</tr>");
 });
@@ -39,24 +47,27 @@
 }
 });
 
-    $("#userForm").submit(function (event) {
+    $("#volunteerForm").submit(function (event) {
     event.preventDefault();
     let user = {
-    firstName: $("#firstName").val(),
-    secondName: $("#secondName").val(),
-    email: $("#email").val(),
-    address: $("#address").val(),
-    phoneNumber: $("#phoneNumber").val()
+    ID: $("#volunteerID").val(),
+    firstName: $("#volunteerNam").val(),
+    surName: $("#volunteerSurName").val(),
+    age: $("#volunteerAge").val(),
+    address: $("#volunteerCity").val()
+     phoneNumber: $("#volunteerPhonenumber").val(),
+        gender: $("#volunteerMale").val(),
+       email: $("#volunteerEmail").val()
 };
 
     $.ajax({
     type: "POST",
-    url: "/users/addUser",
+    url: "/volunteer/addVolunteer",
     contentType: "application/json",
-    data: JSON.stringify(user),
+    data: JSON.stringify(volunteer),
     success: function () {
-    alert("user saved successfully!");
-    addRow(user)
+    alert("volunteer saved successfully!");
+    addRow(volunteer)
 
 },
     error: function (error) {
@@ -67,13 +78,13 @@
 });
 
 
-    function findUserById(id) {
+    function findVolunteerByID(volunteerID) {
     $.ajax({
         type: "Get",
-        url: "/user/findUserId/"+id,
-        success: function (user) {
-            alert("find user successfully id="+user.id);
-            window.location.href = "/profile.html?id="+user.id;//+ encodeURIComponent(user.id);
+        url: "/volunteer/findVolunteerID/"+volunteerID,
+        success: function (volunteer) {
+            alert("find volunteer successfully id="+volunteer.volunteerID);
+            window.location.href = "/profile.html?id="+volunteer.volunteerID;//+ encodeURIComponent(volunteer.volunteerID);
 
         },
         error: function (error) {
@@ -81,7 +92,133 @@
         }
     });
 
+
+ $(document).ready(function () {
+    // Fetch data using AJAX
+
+    function addRow(org) {
+        $("#orgList").append("<tr><td>" +org.orgID + "</td>" +
+            "<td>" + org.orgName +
+ "<td>" + org.orgEmail +
+  "<td>" + org.orgName +
+  "<td>" + org.employeeName +
+            "<button onclick='findOrgByID(" + org.orgID + ")'>" + "Profile" + "</button>" +
+            "</td>"+
+            "</tr>");
+    }
 }
+ $.ajax({
+    type: "GET",
+    url: "/org/getAll",
+    success: function (org) {
+    // Iterate through the products and display them in the table
+    const orgList = $("#orgList");
+    org.forEach(function (org) {
+    orgList.append("<tr>" +
+    "<td>" + org.orgID + "</td>"
+    +"<td>"+ org.orgName + "</td>"
+  +"<td>"+ org.orgEmail + "</td>"
+  +"<td>"+ org.employeeName + "</td>"
+    "<td>" +
+    "<button onclick='findOrgById(" +  org.orgIDD + ")'>" + "Profile" + "</button>" +
+    "</td>"
+    +"</tr>");
+});
+},
+
+    $.ajax({
+    type: "POST",
+    url: "/org/addOrg",
+    contentType: "application/json",
+    data: JSON.stringify(org),
+    success: function () {
+    alert("org saved successfully!");
+    addRow(org)
+
+},
+    error: function (error) {
+    console.log("Error saving person: ", error);
+}
+});
+});
+});
+  function findOrgById(orgID) {
+    $.ajax({
+        type: "Get",
+        url: "/org/findOrgByID/"+orgID,
+        success: function (org) {
+            alert("find org successfully id="+org.orgID);
+            window.location.href = "/profile.html?id="+org.orgID;//+ encodeURIComponent(org.orgID);
+
+        },
+        error: function (error) {
+            console.log("Error saving person: ", error);
+        }
+    });
+
+
+$(document).ready(function () {
+    // Fetch data using AJAX
+
+    function addRow(org) {
+        $("#usersList").append("<tr><td>" + org.orgIDD + "</td>" +
+            "<td>" + org.orgName +
+ "<td>" + org.orgEmail +
+  "<td>" + org.employeeName +
+            "<button onclick='findOrgById(" + org.orgID + ")'>" + "Profile" + "</button>" +
+            "</td>"+
+            "</tr>");
+    }
+}
+ $.ajax({
+    type: "GET",
+    url: "/admin/getAll",
+    success: function (org) {
+    // Iterate through the products and display them in the table
+    const orgList = $("#orgList");
+    org.forEach(function (org) {
+    orgList.append("<tr>" +
+    "<td>" +org.orgID + "</td>"
+    +"<td>"+ org.orgName + "</td>"
+ +"<td>"+ org.orgEmail + "</td>"
+ +"<td>"+ org.employeeName + "</td>"
+    "<td>" +
+    "<button onclick='findAdminById(" + org.orgID + ")'>" + "Profile" + "</button>" +
+    "</td>"
+    +"</tr>");
+});
+},
+
+    $.ajax({
+    type: "POST",
+    url: "/org/addOrg",
+    contentType: "application/json",
+    data: JSON.stringify(org),
+    success: function () {
+    alert("org saved successfully!");
+    addRow(org)
+
+},
+    error: function (error) {
+    console.log("Error saving person: ", error);
+}
+});
+});
+});
+  function findOrgById(orgID) {
+    $.ajax({
+        type: "Get",
+        url: "/admin/findOrgID/"+orgID,
+        success: function (org) {
+            alert("find org successfully id="+org.orgID);
+            window.location.href = "/profile.html?id="+org.orgID;//+ encodeURIComponent(org.orgID);
+
+        },
+        error: function (error) {
+            console.log("Error saving person: ", error);
+        }
+    });
+
     async function encryptNumber(number, key) {
         const encoder = new TextEncoder();
         const data = encoder.encode(number.toString());
